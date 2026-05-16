@@ -10,8 +10,9 @@ export class User {
   @Column()
   name: string;
   
-  @Column('int') // Especificamos que es un entero
-  edad: number;
+ // 1. Cambiamos 'edad' por 'fechaNacimiento' con tipo 'date'
+  @Column({ type: 'date', nullable: true }) 
+  fechaNacimiento: string; // En TypeScript lo manejamos como string (YYYY-MM-DD)
 
   @Column({ unique: true }) // El email no se puede repetir
   email: string;

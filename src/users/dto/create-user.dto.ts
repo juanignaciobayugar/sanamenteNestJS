@@ -1,14 +1,13 @@
-import { IsString, IsEmail, IsInt, Min, MinLength, Max } from 'class-validator';
+import { IsString, IsEmail, MinLength, IsDateString, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
   @MinLength(3, { message: 'El nombre es muy corto' })
   name: string; // Aquí recibirás el nombre completo o solo el nombre
 
-  @IsInt()
-  @Min(18) // Suponiendo que debe ser mayor de edad
-  @Max(99) // Suponiendo un límite de edad razonable
-  edad: number;
+ @IsNotEmpty({ message: 'La fecha de nacimiento es obligatoria' })
+  @IsDateString({}, { message: 'La fecha de nacimiento debe ser un formato válido (AAAA-MM-DD)' })
+  fechaNacimiento: string;
 
   @IsEmail({}, { message: 'El email no es válido' })
   email: string;
