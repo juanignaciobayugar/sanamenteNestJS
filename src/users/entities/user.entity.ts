@@ -1,4 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { OneToMany } from 'typeorm';
+import { CalendarNote } from '../../calendar-notes/entities/calendar-note.entity'; // Ajustá la ruta
 
 @Entity('users') // Nombre de la tabla en la DB
 export class User {
@@ -16,5 +18,8 @@ export class User {
 
   @Column({ select: false })// <--- Esto hace que TypeORM lo ignore en los 'find'
   password: string;
+
+@OneToMany(() => CalendarNote, (note) => note.usuario)
+  notasCalendario: CalendarNote[];
 
 }
