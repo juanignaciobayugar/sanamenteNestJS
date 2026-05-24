@@ -8,6 +8,7 @@ import { CalendarNotesModule } from './calendar-notes/calendar-notes.module';
 import { CalendarNote } from './calendar-notes/entities/calendar-note.entity';
 import { ContactsModule } from './contacts/contacts.module';
 import { Contact } from './contacts/entities/contact.entity';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -25,6 +26,7 @@ import { Contact } from './contacts/entities/contact.entity';
     DailyRecordsModule,
     CalendarNotesModule,
     ContactsModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
