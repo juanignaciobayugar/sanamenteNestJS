@@ -11,7 +11,7 @@ async function bootstrap() {
     forbidNonWhitelisted: true, // Lanza error si envían campos extra
     transform: true, // Convierte los tipos (ej: string a number) automáticamente
   }));
-
+app.enableCors();
   await app.listen(3000);
 }
 bootstrap();
