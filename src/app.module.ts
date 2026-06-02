@@ -19,8 +19,8 @@ import { AuthModule } from './auth/auth.module';
       password: 'root',
       database: 'Sanamente',
       entities: [User, DailyRecord, CalendarNote, Contact], // Importante: registrar la entidad aquí
-      dropSchema: true, // Esto borra y recrea la base de datos cada vez que inicias la app, útil para desarrollo pero peligroso en producción
-      synchronize: true, // ¡CUIDADO! Solo para desarrollo, crea las tablas solo
+      dropSchema: false, // Esto borra y recrea la base de datos cada vez que inicias la app, útil para desarrollo pero peligroso en producción
+      synchronize: false, // ¡CUIDADO! Solo para desarrollo, crea las tablas solo
     }),
     UsersModule,
     DailyRecordsModule,

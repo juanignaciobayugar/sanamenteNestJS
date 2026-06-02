@@ -11,75 +11,63 @@ export class CalendarNotesService {
   constructor(
     @InjectRepository(CalendarNote)
     private readonly calendarNoteRepository: Repository<CalendarNote>,
+  ) {}
 
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
-  ) { }
+  // 1. CREAR UNA NOTA (Vinculada al usuario del token)
+  async create(createCalendarNoteDto: CreateCalendarNoteDto, userId: number) {
+    const { creado_en, ...noteData } = createCalendarNoteDto;
 
-  // 1. CREAR UNA NOTA
-  async create(createCalendarNoteDto: CreateCalendarNoteDto) {
-    const { id_usuario, ...noteData } = createCalendarNoteDto;
-
-    // Validamos primero si el usuario existe en la base de datos
-    const user = await this.userRepository.findOneBy({ id: id_usuario });
-    if (!user) {
-      throw new NotFoundException(`Usuario con ID ${id_usuario} no encontrado`);
-    }
-
-    // Creamos la instancia vinculándole el usuario que encontramos
     const newNote = this.calendarNoteRepository.create({
       ...noteData,
-      creadoEn: noteData.creado_en,
-      usuario: user,
+      creadoEn: creado_en, // Mapeamos el campo del DTO a tu entidad
+      usuario: { id: userId }, // Relación directa usando el ID del token
     });
 
     return await this.calendarNoteRepository.save(newNote);
   }
 
-  // 2. OBTENER TODAS LAS NOTAS
-  async findAll() {
+  // 2. OBTENER TODAS LAS NOTAS (Únicamente del usuario logueado)
+  async findAllByUser(userId: number) {
     return await this.calendarNoteRepository.find({
-      relations: ['usuario'], // Esto hace un JOIN para traerte los datos del usuario dueño de la nota
+      where: { usuario: { id: userId } },
+      order: { creadoEn: 'ASC' }, // Te las devuelve ordenadas por hora
     });
   }
 
-  // 3. OBTENER UNA NOTA POR ID
-  async findOne(id: number) {
+  // 3. OBTENER UNA NOTA POR ID (Solo si pertenece al usuario logueado)
+  async findOne(id: number, userId: number) {
     const note = await this.calendarNoteRepository.findOne({
-      where: { id },
-      relations: ['usuario'],
+      where: { id, usuario: { id: userId } },
     });
+
     if (!note) {
-      throw new NotFoundException(`Nota de calendario con ID ${id} no encontrada`);
+      throw new NotFoundException(`Nota con ID ${id} no encontrada o no tienes permisos`);
     }
+
     return note;
   }
 
-  // 4. MODIFICAR UNA NOTA (PATCH)
-  async update(id: number, updateCalendarNoteDto: UpdateCalendarNoteDto) {
-    const note = await this.findOne(id); // Reutilizamos findOne para verificar si existe
+  // 4. MODIFICAR UNA NOTA (Asegurando propiedad antes de editar)
+  async update(id: number, updateCalendarNoteDto: UpdateCalendarNoteDto, userId: number) {
+    // Reutiliza findOne. Si no es del usuario, frena acá con un 404/403 automáticamente
+    const note = await this.findOne(id, userId); 
 
-    const { id_usuario, ...noteData } = updateCalendarNoteDto;
+    const { creado_en, ...noteData } = updateCalendarNoteDto;
 
-    // Si en el PATCH nos mandan un nuevo id_usuario, validamos que exista
-    if (id_usuario) {
-      const user = await this.userRepository.findOneBy({ id: id_usuario });
-      if (!user) {
-        throw new NotFoundException(`Usuario con ID ${id_usuario} no encontrado`);
-      }
-      note.usuario = user;
+    if (creado_en) {
+      note.creadoEn = creado_en;
     }
-    if (updateCalendarNoteDto.creado_en) {
-      note.creadoEn = updateCalendarNoteDto.creado_en;
-    }
-    // Fusionamos los datos nuevos sobre la nota que ya teníamos
+
+    // Fusionamos los cambios en la entidad que encontramos
     this.calendarNoteRepository.merge(note, noteData);
     return await this.calendarNoteRepository.save(note);
   }
 
-  // 5. ELIMINAR UNA NOTA
-  async remove(id: number) {
-    const note = await this.findOne(id);
+  // 5. ELIMINAR UNA NOTA (Asegurando propiedad antes de borrar)
+  async remove(id: number, userId: number) {
+    // Reutiliza findOne para asegurar que sea suya antes de borrar de la base de datos
+    const note = await this.findOne(id, userId); 
+    
     await this.calendarNoteRepository.remove(note);
     return { message: `Nota con ID ${id} eliminada correctamente` };
   }

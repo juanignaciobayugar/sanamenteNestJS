@@ -4,6 +4,7 @@ export class CreateDailyRecordDto {
   @IsString()
   fecha: string;
 
+  @IsOptional()
   @IsInt()
   userId: number;
 
