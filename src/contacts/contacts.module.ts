@@ -3,10 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ContactsService } from './contacts.service';
 import { ContactsController } from './contacts.controller';
 import { Contact } from './entities/contact.entity';
-import { User } from '../users/entities/user.entity'; // Ajustá la ruta a tu entidad User
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Contact, User])],
+  imports: [
+    // Registramos la entidad para que el Repository pueda ser inyectado en el Service
+    TypeOrmModule.forFeature([Contact])
+  ],
   controllers: [ContactsController],
   providers: [ContactsService],
 })
