@@ -33,7 +33,7 @@ export class UsersService {
  findOne(email: string): Promise<User | null> {
   return this.usersRepository.findOne({ 
     where: { email },
-    select: ['id', 'email', 'password'] // 👈 LE DICES EXPLÍCITAMENTE QUE TRAIGA LA CONTRASEÑA
+    select: ['id', 'email', 'name' ,'password' ] // 👈 LE DICES EXPLÍCITAMENTE QUE TRAIGA LA CONTRASEÑA
   });
 }
 
