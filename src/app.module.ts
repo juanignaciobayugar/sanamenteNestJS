@@ -9,6 +9,7 @@ import { CalendarNote } from './calendar-notes/entities/calendar-note.entity';
 import { ContactsModule } from './contacts/contacts.module';
 import { Contact } from './contacts/entities/contact.entity';
 import { AuthModule } from './auth/auth.module';
+import { StatisticsModule } from './StatisticsModule/statistics.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -18,7 +19,7 @@ import { AuthModule } from './auth/auth.module';
       username: 'root',
       password: 'root',
       database: 'Sanamente',
-      entities: [User, DailyRecord, CalendarNote, Contact], // Importante: registrar la entidad aquí
+      entities: [User, DailyRecord, CalendarNote, Contact,], // Importante: registrar la entidad aquí
       dropSchema: false, // Esto borra y recrea la base de datos cada vez que inicias la app, útil para desarrollo pero peligroso en producción
       synchronize: false, // ¡CUIDADO! Solo para desarrollo, crea las tablas solo
     }),
@@ -27,6 +28,7 @@ import { AuthModule } from './auth/auth.module';
     CalendarNotesModule,
     ContactsModule,
     AuthModule,
+    StatisticsModule,
   ],
 })
 export class AppModule {}
