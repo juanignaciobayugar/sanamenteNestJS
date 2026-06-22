@@ -30,12 +30,20 @@ export class UsersService {
    * Nota: Por la configuración de tu entidad, el campo 'password' se va a omitir automáticamente.
    */
 
- findOne(email: string): Promise<User | null> {
-  return this.usersRepository.findOne({ 
-    where: { email },
-    select: ['id', 'email', 'name' ,'password' ] // 👈 LE DICES EXPLÍCITAMENTE QUE TRAIGA LA CONTRASEÑA
-  });
-}
+// 1. Este se queda como estaba, para el Login (busca por Email)
+  findOne(email: string): Promise<User | null> {
+    return this.usersRepository.findOne({ 
+      where: { email },
+      select: ['id', 'email', 'name' , 'password' ] 
+    });
+  }
+
+  // ✅ 2. AGREGÁ ESTE NUEVO MÉTODO para el Perfil (busca por ID)
+  findOneById(id: number): Promise<User | null> {
+    return this.usersRepository.findOne({ 
+      where: { id } // 💎 Acá sí filtramos por la columna 'id'
+    });
+  }
 
 
   findAll() {
