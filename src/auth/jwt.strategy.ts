@@ -23,8 +23,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     
     // NOTA: Si en tu login guardaste el ID del usuario como 'sub' (estándar de JWT), lo recuperamos así:
     return { 
-      userId: payload.id, 
-      email: payload.email 
+      userId: payload.sub, // <-- Asegurate de que este campo coincida con lo que guardaste en el token
+      email: payload.username // <-- Si guardaste el email o username, también lo podés recuperar aquí 
     };
   }
 }

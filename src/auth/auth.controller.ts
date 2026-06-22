@@ -18,12 +18,18 @@ export class AuthController {
 @UseGuards(AuthGuard('jwt')) 
 @Get('perfil')
 async obtenerPerfilConMensajes(@Request() req) {
+  console.log("=== [DEBUG COMPLETO DE REQ.USER] ===");
+  console.log("Contenido real de req.user:", req.user); // 👈 ESTO nos va a mostrar la verdad
+  console.log("=====================================");
   // 1. El ID real (1) que acabamos de ver en Postman viene acá adentro:
-  const usuarioId = req.user.userId; 
+  const usuarioId = (req.user.userId); // <-- Asegurate de que este campo coincida con lo que retornaste en tu JwtStrategy.validate()
+  // Si querés estar 100% seguro de qué está leyendo NestJS, meté este log temporal:
+  console.log("=== [DEBUG BACKEND] ===");
+  console.log("ID de usuario extraído del token:", usuarioId);
 
   // 2. Buscamos al usuario real en la Base de Datos usando tu servicio existente
   // (Asegurate de tener "usersService" inyectado en el constructor de este controlador)
-  const usuarioReal = await this.usersService.findOne(usuarioId); 
+  const usuarioReal = await this.usersService.findOneById(usuarioId);
   
   if (!usuarioReal) {
     throw new NotFoundException('Usuario no encontrado en la base de datos');
