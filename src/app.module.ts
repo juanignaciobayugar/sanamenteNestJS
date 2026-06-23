@@ -13,15 +13,12 @@ import { StatisticsModule } from './StatisticsModule/statistics.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql', // o 'postgres'
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'Sanamente',
+type: 'mysql',
+  url: 'mysql://root:QLlLYWEcNYlwShFCNQMkiQliTRlmPaRI@switchyard.proxy.rlwy.net:41212/railway',
+
       entities: [User, DailyRecord, CalendarNote, Contact,], // Importante: registrar la entidad aquí
-      dropSchema: false, // Esto borra y recrea la base de datos cada vez que inicias la app, útil para desarrollo pero peligroso en producción
-      synchronize: false, // ¡CUIDADO! Solo para desarrollo, crea las tablas solo
+      dropSchema: true, // Esto borra y recrea la base de datos cada vez que inicias la app, útil para desarrollo pero peligroso en producción
+      synchronize: true, // ¡CUIDADO! Solo para desarrollo, crea las tablas solo
     }),
     UsersModule,
     DailyRecordsModule,
@@ -31,4 +28,4 @@ import { StatisticsModule } from './StatisticsModule/statistics.module';
     StatisticsModule,
   ],
 })
-export class AppModule {}
+export class AppModule { }
