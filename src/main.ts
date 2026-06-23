@@ -15,13 +15,19 @@ async function bootstrap() {
       return new BadRequestException(errors);
     },
   }));
-app.use(cors({
+app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://sanamente-oqok.onrender.com',
+      'https://sanamente-oqok.onrender.com', // Tu frontend en Render
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
-  })) ;
+  });
+
+  // 2. OBLIGATORIO PARA RENDER: Usar el puerto dinámico y '0.0.0.0'
+  const port = process.env.PORT || 3000;
+  
+  await app.listen(port, '0.0.0.0'); 
+  console.log(`Servidor escuchando en el puerto ${port}`);
 }
 bootstrap();
