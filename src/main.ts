@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe,BadRequestException } from '@nestjs/common'; // <-- Importa esto
 import { AppModule } from './app.module';
-
+import cors from 'cors';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -15,7 +15,13 @@ async function bootstrap() {
       return new BadRequestException(errors);
     },
   }));
-app.enableCors();
-  await app.listen(3000);
+app.use(cors({
+    origin: [
+      'http://localhost:5173',
+      'https://sanamente-oqok.onrender.com',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true,
+  })) ;
 }
 bootstrap();
