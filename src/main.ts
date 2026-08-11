@@ -8,9 +8,11 @@ app.enableCors({
     origin: [
       'https://www.bayadisenio.com.ar',
       'https://bayadisenio.com.ar',
+      'http://localhost:5173',
+      'http://localhost:3000',
     ],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({
