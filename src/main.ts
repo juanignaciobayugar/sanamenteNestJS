@@ -4,14 +4,13 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
- app.enableCors({
+app.enableCors({
     origin: [
       'https://www.bayadisenio.com.ar',
       'https://bayadisenio.com.ar',
-      'http://localhost:5173', // O el puerto local de tu React
-      'http://localhost:3000',
     ],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     credentials: true,
   });
   app.useGlobalPipes(new ValidationPipe({
